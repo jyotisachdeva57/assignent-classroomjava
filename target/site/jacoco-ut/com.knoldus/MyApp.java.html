@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>MyApp.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">my-first-maven</a> &gt; <a href="index.source.html" class="el_package">com.knoldus</a> &gt; <span class="el_source">MyApp.java</span></div><h1>MyApp.java</h1><pre class="source lang-java linenums">package com.knoldus;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import static java.util.stream.Collectors.toList;
+
+/**
+ * class student having name,roll number and subjects as fields.
+ */
+class Student {
+
+  private String name;
+  private int rollNumber;
+  private Optional&lt;List&lt;String&gt;&gt; subject;
+
+<span class="fc" id="L18">  private Student(String name, int rollNumber, Optional&lt;List&lt;String&gt;&gt; subject) {</span>
+<span class="fc" id="L19">    this.name = name;</span>
+<span class="fc" id="L20">    this.rollNumber = rollNumber;</span>
+<span class="fc" id="L21">    this.subject = subject;</span>
+<span class="fc" id="L22">  }</span>
+
+  public String getName() {
+<span class="fc" id="L25">    return name;</span>
+  }
+
+
+  private int getRollNumber() {
+<span class="nc" id="L30">    return rollNumber;</span>
+  }
+
+
+  @Override
+  public String toString() {
+<span class="nc" id="L36">    return getName() + &quot;,&quot; + getRollNumber() + &quot;,&quot; + getSubject();</span>
+
+  }
+
+  public Optional&lt;List&lt;String&gt;&gt; getSubject() {
+<span class="fc" id="L41">    return subject;</span>
+  }
+
+
+  public static List&lt;Student&gt; getStudent() {
+<span class="fc" id="L46">    List&lt;String&gt; listSub = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L47">    listSub.add(&quot;english&quot;);</span>
+<span class="fc" id="L48">    listSub.add(&quot;maths&quot;);</span>
+
+<span class="fc" id="L50">    Optional&lt;List&lt;String&gt;&gt; month = Optional.of(listSub);</span>
+
+<span class="fc" id="L52">    List&lt;Student&gt; list = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L53">    list.add(new Student(&quot;jyoti&quot;, 1, month));</span>
+<span class="fc" id="L54">    list.add(new Student(&quot;jyo&quot;, 2, Optional.empty()));</span>
+<span class="fc" id="L55">    return list;</span>
+  }
+
+}
+
+
+final class ClassRoom {
+
+  private String roomID;
+  private Optional&lt;List&lt;Student&gt;&gt; studentList;
+
+  public String getRoomID() {
+<span class="fc" id="L67">    return roomID;</span>
+  }
+
+  public Optional&lt;List&lt;Student&gt;&gt; getStudentList() {
+<span class="fc" id="L71">    return studentList;</span>
+  }
+
+  @Override
+  public String toString() {
+<span class="nc" id="L76">    return getRoomID() + getStudentList();</span>
+  }
+
+<span class="fc" id="L79">  private ClassRoom(String roomID, Optional&lt;List&lt;Student&gt;&gt; studentList) {</span>
+<span class="fc" id="L80">    this.roomID = roomID;</span>
+<span class="fc" id="L81">    this.studentList = studentList;</span>
+<span class="fc" id="L82">  }</span>
+
+  public static List&lt;ClassRoom&gt; getClassRoomStudents() {
+<span class="fc" id="L85">    List&lt;Student&gt; student = Student.getStudent();</span>
+    List&lt;ClassRoom&gt; listClassStudents;
+<span class="fc" id="L87">    listClassStudents = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L88">    listClassStudents.add(new ClassRoom(&quot;xyz&quot;, Optional.of(student)));</span>
+<span class="fc" id="L89">    listClassStudents.add(new ClassRoom(&quot;xyz&quot;, Optional.of(student)));</span>
+//    listClassStudents.add(new ClassRoom(null,Optional.empty()));
+<span class="fc" id="L91">    return listClassStudents;</span>
+  }
+
+}
+
+<span class="fc" id="L96">class Operations {</span>
+<span class="fc" id="L97">  private List&lt;ClassRoom&gt; list = ClassRoom.getClassRoomStudents();</span>
+
+  /**
+   * returns students having room and no subjects
+   * @return
+   */
+
+  List&lt;List&lt;String&gt;&gt; returnStudentsWithRoomAndNoSubject() {
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">    return list.stream().filter(s -&gt; s.getRoomID() != null &amp;&amp;</span>
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">        (s.getStudentList().isPresent()))</span>
+<span class="fc" id="L107">        .map(s -&gt; s.getStudentList().orElse(Collections.emptyList()).stream()</span>
+<span class="fc" id="L108">            .map(Student::getName).collect(toList())).collect(toList());</span>
+  }
+
+  /**
+   * returns subjects of students having room number xyz.
+   * @return
+   */
+
+  List&lt;List&lt;String&gt;&gt; returnSubjectOfRoomxyz() {
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">    return list.stream().filter(s -&gt; s.getRoomID().equals(&quot;xyz&quot;)</span>
+<span class="pc bpc" id="L118" title="1 of 2 branches missed.">        &amp;&amp; s.getStudentList().isPresent()).map(s -&gt; s.getStudentList()</span>
+<span class="pc" id="L119">        .orElseThrow(() -&gt; new NullPointerException(&quot;no Element Found&quot;)).stream()</span>
+<span class="fc" id="L120">        .flatMap(y -&gt; y.getSubject().orElse(Collections.emptyList()).stream()).</span>
+<span class="fc" id="L121">            collect(toList())).collect(toList());</span>
+  }
+
+  /**
+   * returns students that are associated with room.
+   * @return
+   */
+  List&lt;String&gt; returnStudentsAssociatedWithRoom() {
+<span class="pc bpc" id="L129" title="1 of 2 branches missed.">    return list.stream().filter(s -&gt; s.getRoomID() != null &amp;&amp;</span>
+<span class="pc bpc" id="L130" title="1 of 2 branches missed.">        s.getStudentList().isPresent()).map(x -&gt; (x.getRoomID() + &quot;hello student&quot;))</span>
+<span class="fc" id="L131">        .collect(toList());</span>
+  }
+
+}
+
+
+<span class="nc" id="L137">public class MyApp {</span>
+
+  public static void main(String args[]) {
+<span class="nc" id="L140">    Operations operations = new Operations();</span>
+<span class="nc" id="L141">    System.out.println(operations.returnStudentsWithRoomAndNoSubject());</span>
+<span class="nc" id="L142">    System.out.println(operations.returnStudentsAssociatedWithRoom());</span>
+<span class="nc" id="L143">    System.out.println(operations.returnSubjectOfRoomxyz());</span>
+<span class="nc" id="L144">  }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>
